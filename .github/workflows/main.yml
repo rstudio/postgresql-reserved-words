@@ -1,0 +1,19 @@
+name: main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    tags: v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+      - run: go generate ./...
+      - run: go test -v ./...
+      - run: git diff --exit-code
+      - run: git diff --cached --exit-code
